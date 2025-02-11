@@ -1,0 +1,6 @@
+streamlit
+pandas
+snowflake-connector-python
+pyarrow
+PyYAML
+openpyxl

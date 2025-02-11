@@ -1,1 +1,24 @@
+# Ignore virtual environment
 venv/
+
+# Ignore configuration files (contains secrets)
+config/
+
+# Ignore Python bytecode cache
+__pycache__/
+scripts/__pycache__/
+
+# Ignore compiled Python files
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore temporary files and logs
+*.log
+*.tmp
+
+# Ignore Jupyter Notebook checkpoints (if applicable)
+.ipynb_checkpoints/
+
+# Ignore VS Code settings (optional)
+.vscode/
