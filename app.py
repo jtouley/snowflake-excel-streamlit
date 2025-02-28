@@ -51,8 +51,8 @@ def main():
                     tmp_file.write(uploaded_file.getvalue())
                     tmp_file_path = tmp_file.name
 
-                # Process the file
-                ingestor.ingest_excel(tmp_file_path)
+                # Process the file with original filename
+                ingestor.ingest_excel(tmp_file_path, original_filename=uploaded_file.name)
 
                 # Update progress
                 progress_bar.progress(100)
@@ -84,6 +84,7 @@ def main():
         - Data preview before ingestion
         - Progress tracking
         - Batch processing
+        - Original filename preservation
 
         ### Data Processing
         - Files are stored in bronze layer

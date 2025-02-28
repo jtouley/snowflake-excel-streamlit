@@ -3,7 +3,7 @@ import pandas as pd
 import snowflake.connector
 import yaml
 import os
-from datetime import datetime, timedelta  # Import timedelta from datetime
+from datetime import datetime, timedelta
 from typing import Dict, Any
 import logging
 
@@ -78,12 +78,19 @@ class BronzeIngestor:
 
         return df.apply(row_to_json, axis=1)
 
-    def ingest_excel(self, file_path: str) -> None:
-        """Process Excel file and upload to Snowflake bronze table in batches."""
+    def ingest_excel(self, file_path: str, original_filename: str = None) -> None:
+        """Process Excel file and upload to Snowflake bronze table in batches.
+        
+        Args:
+            file_path: Path to the Excel file to process
+            original_filename: Original filename to store in the database (overrides the path basename)
+        """
         try:
             # Read Excel file
             df = pd.read_excel(file_path)
-            filename = os.path.basename(file_path)
+            
+            # Use the provided original filename if available, otherwise extract from path
+            filename = original_filename if original_filename else os.path.basename(file_path)
             
             # Add unique ID for each row
             df['id'] = df.index.astype(str)
