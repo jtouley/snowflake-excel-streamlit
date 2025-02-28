@@ -1,0 +1,7 @@
+name: snowflake-excel-app
+spec:
+  containers:
+    - name: streamlit-container
+      image: mydb.public.snowflake_repo/snowflake-excel-app:latest
+      ports:
+        - containerPort: 8501

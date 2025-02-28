@@ -1,0 +1,7 @@
+snowflake:
+  account: "se44657.us-east-2.aws"
+  user: "jtoul3y06"
+  password: "4E67X!_xV6Q.CYTwHN4_6L6e3tP@tq"
+  database: "SANDBOX"
+  schema: "bronze_schema"
+  warehouse: "SANDBOX_WH"
