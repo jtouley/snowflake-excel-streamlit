@@ -25,20 +25,20 @@ git clone [your-repo-url]
 cd snowflake-excel-streamlit
 ```
 
-2. Create and activate virtual environment:
+2. Run the setup.sh:
 ```bash
-python -m venv venv
-source venv/bin/activate  # On Windows: .\venv\Scripts\activate
+bash config/setup.sh
 ```
-
-3. Install dependencies:
-```bash
-pip install -r requirements.txt
-```
+### This script will:
+- Create and activate a Python virtual environment (if not already present)
+- Upgrade pip and install all dependencies from requirements.txt
+- Install the package in development mode
+- Set up pre-commit hooks
+- Create the config directory and an example configuration file if they do not exist
 
 ### Configuration
 
-1. Create `config/config.yaml`:
+1. Update the `config/config.yaml`:
 ```yaml
 snowflake:
   account: "your_account"
@@ -71,20 +71,38 @@ streamlit run app.py
 
 ### Command Line Usage
 ```bash
-python scripts/ingest_pooled.py your_file.xlsx
+python -m excel_to_bronze sample.xlsx
 ```
 
 ## Project Structure
 ```
 .
-├── app.py                 # Streamlit application
-├── config/
-│   └── config.yaml       # Snowflake configuration
-├── scripts/
+├── README.md                            # Project documentation
+├── app.py                               # Main application entry point
+├── config
+│   ├── config.yaml                      # Your Snowflake and application configuration (ignored by Git)
+│   ├── config.yaml.example              # Example configuration file
+│   └── setup.sh                         # Setup script for environment and dependencies
+├── excel_to_bronze                      # Core package for data ingestion and processing
 │   ├── __init__.py
-│   ├── bronze_ingestor.py # Main ingestor interface
-│   └── ingest_pooled.py  # Core ingestion logic
-└── requirements.txt      # Project dependencies
+│   ├── __main__.py                      # Module entry point for execution
+│   ├── config.py                        # Configuration manager for the package
+│   ├── connectors                       # External connectors (e.g., Snowflake)
+│   │   ├── __init__.py
+│   │   └── snowflake.py
+│   ├── ingestion                        # Modules for data ingestion
+│   │   ├── __init__.py
+│   │   ├── base.py                      # Base ingestion classes and error definitions
+│   │   ├── bronze.py                    # Bronze layer ingestion implementation
+│   │   └── serializers.py               # Data serialization utilities
+│   └── utils                            # Utility modules (e.g., logging)
+│       ├── __init__.py
+│       └── logging.py
+├── excel_to_bronze.egg-info             # Packaging metadata (auto-generated)
+├── pyproject.toml                       # Build and tool configuration
+├── requirements.txt                     # Project dependencies
+├── sample.xlsx                          # Sample Excel file for testing
+└── setup.py                             # Installation and setup script
 ```
 
 ## Data Architecture
@@ -98,14 +116,15 @@ python scripts/ingest_pooled.py your_file.xlsx
 ### JSON Structure
 ```json
 {
-    "metadata": {
-        "column_names": [...],
-        "dtypes": {...}
-    },
-    "data": {
-        "column1": "value1",
-        ...
-    }
+  "metadata": {
+    "column_names": ["col1", "col2", "col3"],
+    "dtypes": {"col1": "int", "col2": "string", "col3": "float"}
+  },
+  "data": {
+    "col1": 1,
+    "col2": "value",
+    "col3": 3.14
+  }
 }
 ```
 
@@ -116,6 +135,11 @@ python scripts/ingest_pooled.py your_file.xlsx
 - Proper cleanup of resources
 
 ## Development
+
+### Code Quality & Best Practices
+- Refactored for Maintainability: Adheres to DRY and SOLID principles.
+- Linting & Pre-commit Hooks: Ensures code consistency via tools defined in pyproject.toml and the pre-commit configuration.
+- Testing: Includes unit and integration tests to ensure robustness.
 
 
 ### Adding New Features
