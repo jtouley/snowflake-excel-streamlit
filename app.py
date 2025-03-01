@@ -13,6 +13,11 @@ from excel_to_bronze.utils.logging import setup_logging
 # Set up logging
 logger = setup_logging()
 
+# 1. Track processed files in session state to avoid re-ingestion.
+#    This prevents reloading both files when a new one is added.
+if "processed_files" not in st.session_state:
+    st.session_state.processed_files = set()
+
 
 def main():
     """Main Streamlit application."""
@@ -42,6 +47,11 @@ def main():
         preview_container = st.empty()
 
         for uploaded_file in uploaded_files:
+            # Skip files that have already been processed
+            if uploaded_file.name in st.session_state.processed_files:
+                st.info(f"{uploaded_file.name} has already been processed. Skipping.")
+                continue
+
             try:
                 # Create progress bar
                 progress_bar = progress_container.progress(0)
@@ -74,6 +84,9 @@ def main():
                 os.unlink(tmp_file_path)
                 time.sleep(1)  # Give users time to see the success message
 
+                # Mark file as processed so it won't be re-ingested.
+                st.session_state.processed_files.add(uploaded_file.name)
+
             except DataIngestionError as e:
                 status_container.error(
                     f"Error processing {uploaded_file.name}: {str(e)}"
@@ -94,7 +107,7 @@ def main():
         # Final success message
         st.success("All files processed!")
 
-    # Add helpful information
+    # Add helpful information in sidebar
     with st.sidebar:
         st.header("Information")
         st.markdown(
