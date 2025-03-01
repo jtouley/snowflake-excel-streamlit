@@ -1,41 +1,41 @@
 """Streamlit application for Excel to Snowflake Bronze ingestion."""
-import streamlit as st
-import tempfile
 import os
+import tempfile
 import time
-import pandas as pd
 
-from excel_to_bronze.ingestion.bronze import ExcelIngestor
+import pandas as pd
+import streamlit as st
+
 from excel_to_bronze.ingestion.base import DataIngestionError
+from excel_to_bronze.ingestion.bronze import ExcelIngestor
 from excel_to_bronze.utils.logging import setup_logging
 
 # Set up logging
 logger = setup_logging()
 
+
 def main():
     """Main Streamlit application."""
     st.set_page_config(
-        page_title="Excel to Snowflake Bronze Ingestion",
-        page_icon="📊",
-        layout="wide"
+        page_title="Excel to Snowflake Bronze Ingestion", page_icon="📊", layout="wide"
     )
 
     st.title("Excel to Snowflake Bronze Layer Ingestion")
-    st.markdown("""
-    Upload Excel files to be ingested into the Snowflake bronze layer. 
+    st.markdown(
+        """
+    Upload Excel files to be ingested into the Snowflake bronze layer.
     Files will be processed and stored as JSON in an Iceberg table.
-    """)
+    """
+    )
 
     # File uploader
     uploaded_files = st.file_uploader(
-        "Choose Excel file(s)", 
-        type=['xlsx', 'xls'], 
-        accept_multiple_files=True
+        "Choose Excel file(s)", type=["xlsx", "xls"], accept_multiple_files=True
     )
 
     if uploaded_files:
         ingestor = ExcelIngestor()
-        
+
         # Progress tracking
         progress_container = st.empty()
         status_container = st.empty()
@@ -55,12 +55,16 @@ def main():
                     st.text(f"Columns: {', '.join(df.columns)}")
 
                 # Create a temporary file
-                with tempfile.NamedTemporaryFile(delete=False, suffix='.xlsx') as tmp_file:
+                with tempfile.NamedTemporaryFile(
+                    delete=False, suffix=".xlsx"
+                ) as tmp_file:
                     tmp_file.write(uploaded_file.getvalue())
                     tmp_file_path = tmp_file.name
 
                 # Process the file with original filename
-                ingestor.ingest_excel(tmp_file_path, original_filename=uploaded_file.name)
+                ingestor.ingest_excel(
+                    tmp_file_path, original_filename=uploaded_file.name
+                )
 
                 # Update progress
                 progress_bar.progress(100)
@@ -71,11 +75,15 @@ def main():
                 time.sleep(1)  # Give users time to see the success message
 
             except DataIngestionError as e:
-                status_container.error(f"Error processing {uploaded_file.name}: {str(e)}")
+                status_container.error(
+                    f"Error processing {uploaded_file.name}: {str(e)}"
+                )
                 logger.error(f"Ingestion error for {uploaded_file.name}: {str(e)}")
                 continue
             except Exception as e:
-                status_container.error(f"Unexpected error with {uploaded_file.name}: {str(e)}")
+                status_container.error(
+                    f"Unexpected error with {uploaded_file.name}: {str(e)}"
+                )
                 logger.exception(f"Unexpected error processing {uploaded_file.name}")
                 continue
             finally:
@@ -89,7 +97,8 @@ def main():
     # Add helpful information
     with st.sidebar:
         st.header("Information")
-        st.markdown("""
+        st.markdown(
+            """
         ### Supported Features
         - Multiple file upload
         - Excel formats: .xlsx, .xls
@@ -103,7 +112,9 @@ def main():
         - Each row is converted to JSON
         - Metadata is preserved
         - Automatic data type handling
-        """)
+        """
+        )
+
 
 if __name__ == "__main__":
     main()

@@ -1,0 +1,86 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.black]
+line-length = 88
+target-version = ['py39']
+include = '\.pyi?$'
+
+[tool.ruff]
+target-version = "py39"
+line-length = 88
+select = [
+    # Pyflakes
+    "F",
+    # Pycodestyle
+    "E",
+    "W",
+    # isort
+    "I",
+    # pep8-naming
+    "N",
+    # bugbear
+    "B",
+    # pylint
+    "PL",
+    # unused arguments
+    "ARG",
+    # implicit string concatenation
+    "ISC",
+]
+ignore = [
+    # Allow non-abstract empty methods in abstract base classes
+    "B027",
+    # Allow boolean positional values in function calls, like `dict.get(... True)`
+    "FBT003",
+    # Ignore complexity
+    "C901",
+    "PLR0911", "PLR0912", "PLR0913", "PLR0915",
+]
+unfixable = [
+    # Don't touch unused imports
+    "F401",
+]
+
+[tool.ruff.isort]
+known-first-party = ["excel_to_bronze"]
+
+[tool.ruff.flake8-tidy-imports]
+ban-relative-imports = "all"
+
+[tool.ruff.per-file-ignores]
+# Tests can use assertions and relative imports
+"test_*.py" = ["S101", "TID252"]
+
+[tool.mypy]
+python_version = "3.9"
+warn_redundant_casts = false
+warn_unused_ignores = true
+disallow_any_generics = false
+check_untyped_defs = false
+no_implicit_reexport = false
+disallow_untyped_defs = false
+
+# Temporarily disable specific error codes for this PoC.
+disable_error_code = [
+    "has-type",     # Missing explicit type annotations (e.g., _initialized)
+    "arg-type",     # Passing Optional[str] where str is expected (e.g., os.path.exists)
+    "attr-defined", # Attributes not recognized by the type checker (e.g., update on an object)
+    "override",     # Method signature mismatches in subclass overrides
+]
+# TODO: Log an issue to revisit these disables and fix the underlying type errors
+# before pushing this package for broader production use.
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+disallow_untyped_defs = false
+
+[tool.bandit]
+exclude_dirs = ["tests"]
+skips = ["B101","B608"]
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+testpaths = ["tests"]
+pythonpath = ["."]

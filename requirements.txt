@@ -12,6 +12,11 @@ black>=23.0.0  # For code formatting
 pylint>=2.15.0  # For linting
 mypy>=1.0.0  # For type checking
 python-dotenv>=1.0.0  # For environment variable management
+pre-commit>=3.3.1  # For pre-commit hooks
+ruff>=0.0.262  # Fast Python linter
+bandit>=1.7.5  # Security linter
+types-PyYAML>=6.0.12.10  # Type stubs for PyYAML
+types-requests>=2.30.0.0  # Type stubs for requests
 
 # Documentation
 sphinx>=6.0.0  # Optional: for generating documentation

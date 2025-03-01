@@ -1,0 +1,40 @@
+Metadata-Version: 2.2
+Name: excel_to_bronze
+Version: 1.0.0
+Summary: Excel to Snowflake Bronze Layer Ingestion Tool
+Home-page: https://github.com/yourusername/snowflake-excel-streamlit
+Author: Jason Touleyrou
+Author-email: jason.touleyrou@jtouley.com
+Keywords: excel,snowflake,bronze,iceberg,data
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Requires-Python: >=3.9
+Requires-Dist: streamlit>=1.20.0
+Requires-Dist: pandas>=1.5.0
+Requires-Dist: snowflake-connector-python>=3.0.0
+Requires-Dist: pyarrow>=12.0.0
+Requires-Dist: PyYAML>=6.0
+Requires-Dist: openpyxl>=3.1.0
+Provides-Extra: dev
+Requires-Dist: pytest>=7.0.0; extra == "dev"
+Requires-Dist: black>=23.0.0; extra == "dev"
+Requires-Dist: ruff>=0.0.262; extra == "dev"
+Requires-Dist: mypy>=1.0.0; extra == "dev"
+Requires-Dist: python-dotenv>=1.0.0; extra == "dev"
+Requires-Dist: pre-commit>=3.3.1; extra == "dev"
+Requires-Dist: bandit>=1.7.5; extra == "dev"
+Provides-Extra: docs
+Requires-Dist: sphinx>=6.0.0; extra == "docs"
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: home-page
+Dynamic: keywords
+Dynamic: provides-extra
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
