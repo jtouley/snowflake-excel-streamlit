@@ -1,11 +1,19 @@
+"""Streamlit application for Excel to Snowflake Bronze ingestion."""
 import streamlit as st
 import tempfile
 import os
-from scripts.bronze_ingestor import BronzeIngestor
 import time
 import pandas as pd
 
+from excel_to_bronze.ingestion.bronze import ExcelIngestor
+from excel_to_bronze.ingestion.base import DataIngestionError
+from excel_to_bronze.utils.logging import setup_logging
+
+# Set up logging
+logger = setup_logging()
+
 def main():
+    """Main Streamlit application."""
     st.set_page_config(
         page_title="Excel to Snowflake Bronze Ingestion",
         page_icon="📊",
@@ -26,7 +34,7 @@ def main():
     )
 
     if uploaded_files:
-        ingestor = BronzeIngestor()
+        ingestor = ExcelIngestor()
         
         # Progress tracking
         progress_container = st.empty()
@@ -62,10 +70,14 @@ def main():
                 os.unlink(tmp_file_path)
                 time.sleep(1)  # Give users time to see the success message
 
-            except Exception as e:
+            except DataIngestionError as e:
                 status_container.error(f"Error processing {uploaded_file.name}: {str(e)}")
+                logger.error(f"Ingestion error for {uploaded_file.name}: {str(e)}")
                 continue
-
+            except Exception as e:
+                status_container.error(f"Unexpected error with {uploaded_file.name}: {str(e)}")
+                logger.exception(f"Unexpected error processing {uploaded_file.name}")
+                continue
             finally:
                 # Clear progress indicators for next file
                 progress_container.empty()

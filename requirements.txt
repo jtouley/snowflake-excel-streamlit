@@ -1,6 +1,17 @@
-streamlit
-pandas
-snowflake-connector-python
-pyarrow
-PyYAML
-openpyxl
+# Core functionality
+streamlit>=1.20.0
+pandas>=1.5.0
+snowflake-connector-python>=3.0.0
+pyarrow>=12.0.0  # Required for efficient DataFrame operations
+PyYAML>=6.0
+openpyxl>=3.1.0  # For Excel file support
+
+# Development dependencies
+pytest>=7.0.0  # For testing
+black>=23.0.0  # For code formatting
+pylint>=2.15.0  # For linting
+mypy>=1.0.0  # For type checking
+python-dotenv>=1.0.0  # For environment variable management
+
+# Documentation
+sphinx>=6.0.0  # Optional: for generating documentation
