@@ -1,0 +1,2 @@
+[console_scripts]
+excel-to-bronze = excel_to_bronze.__main__:main
