@@ -2,7 +2,7 @@
 venv/
 
 # Ignore configuration files (contains secrets)
-config/config.yaml
+config/*.yaml
 
 # Ignore Python bytecode cache
 __pycache__/
